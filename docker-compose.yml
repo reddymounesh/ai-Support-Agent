@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: support-agent-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: support_agent
+      POSTGRES_PASSWORD: support_pass
+      POSTGRES_DB: support_agent_db
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - support_agent_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U support_user -d support_agent_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  support_agent_pgdata:
